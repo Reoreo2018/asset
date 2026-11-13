@@ -1,0 +1,13 @@
+name: Supabase Keepalive
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check configuration
+        run: echo "Keepalive workflow is ready"
