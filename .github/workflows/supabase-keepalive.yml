@@ -2,12 +2,24 @@ name: Supabase Keepalive
 
 on:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '17 0 * * *'
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   keepalive:
     runs-on: ubuntu-latest
     steps:
-      - name: Check configuration
-        run: echo "Keepalive workflow is ready"
+      - name: Check Supabase connection
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          curl --fail --silent --show-error \
+            --max-time 30 \
+            --retry 2 \
+            -o /dev/null \
+            -H "apikey: ${SUPABASE_PUBLISHABLE_KEY}" \
+            "${SUPABASE_URL}/rest/v1/"
